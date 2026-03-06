@@ -1,11 +1,11 @@
 variable "gcp-username" {
   description = "GCP user name"
-  default     = "icai2025"
+  default     = "palomadiez"
 }
 
 variable "gcp-project" {
   description = "GCP project"
-  default     = "icai2025"
+  default     = "lab6b"
 }
 
 variable "gcp-network" {
