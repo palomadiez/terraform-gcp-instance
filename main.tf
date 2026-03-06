@@ -1,6 +1,6 @@
-resource "google_compute_instance" "tf-vm" {
+resource "google_compute_instance" "tf_vm" {
   name         = "tf-vm"
-  zone         = "us-central1-c"
+  zone         = "us-central1-a"
   machine_type = "n1-standard-1"
   boot_disk {
     initialize_params {
@@ -10,7 +10,7 @@ resource "google_compute_instance" "tf-vm" {
 
   # Add SSH access to the Compute Engine instance
   metadata = {
-    ssh-keys = "${var.gcp-username}:${file("~/.ssh/id_rsa.pub")}"
+    ssh-keys = "${var.gcp-username}:${file("~/.ssh/id_ed25519.pub")}"
   }
 
   # Add http tag to the instance to identify it in the firewall rule
@@ -27,12 +27,12 @@ resource "google_compute_instance" "tf-vm" {
   }
 }
 
-output "tf-vm-internal-ip" {
-  value      = google_compute_instance.tf-vm.network_interface.0.network_ip
-  depends_on = [google_compute_instance.tf-vm]
+output "tf_vm-internal-ip" {
+  value      = google_compute_instance.tf_vm.network_interface[0].network_ip
+  depends_on = [google_compute_instance.tf_vm]
 }
 
-output "tf-vm-ephemeral-ip" {
-  value      = google_compute_instance.tf-vm.network_interface.0.access_config.0.nat_ip
-  depends_on = [google_compute_instance.tf-vm]
+output "tf_vm-ephemeral-ip" {
+  value      = google_compute_instance.tf_vm.network_interface[0].access_config.0.nat_ip
+  depends_on = [google_compute_instance.tf_vm]
 }

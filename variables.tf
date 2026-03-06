@@ -5,7 +5,7 @@ variable "gcp-username" {
 
 variable "gcp-project" {
   description = "GCP project"
-  default     = "lab6b"
+  default     = "lab6b-489108"
 }
 
 variable "gcp-network" {
