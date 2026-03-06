@@ -1,7 +1,8 @@
 resource "google_compute_instance" "tf_vm" {
   name         = "tf-vm"
   zone         = "us-central1-a"
-  machine_type = "n1-standard-1"
+  machine_type = "n1-standard-2"
+  allow_stopping_for_update = true
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
@@ -25,6 +26,18 @@ resource "google_compute_instance" "tf_vm" {
 
     access_config {}
   }
+}
+
+resource "google_compute_disk" "tf_disk" {
+  name = "tf-disk"
+  type = "pd-ssd"
+  size = 1
+  zone = "us-central1-a"
+}
+
+resource "google_compute_attached_disk" "attached_tf_disk" {
+  disk     = google_compute_disk.tf_disk.id
+  instance = google_compute_instance.tf_vm.id
 }
 
 output "tf_vm-internal-ip" {
