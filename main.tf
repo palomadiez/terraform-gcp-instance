@@ -24,7 +24,9 @@ resource "google_compute_instance" "tf_vm" {
     network    = var.gcp-network
     subnetwork = var.gcp-network
 
-    access_config {}
+    access_config {
+      nat_ip = google_compute_address.tf_vm_ip.address
+    }
   }
 }
 
@@ -40,6 +42,11 @@ resource "google_compute_attached_disk" "attached_tf_disk" {
   instance = google_compute_instance.tf_vm.id
 }
 
+resource "google_compute_address" "tf_vm_ip" {
+  name   = "ipv4-address-tf-vm"
+  region = "us-central1"
+}
+
 output "tf_vm-internal-ip" {
   value      = google_compute_instance.tf_vm.network_interface[0].network_ip
   depends_on = [google_compute_instance.tf_vm]
@@ -47,5 +54,10 @@ output "tf_vm-internal-ip" {
 
 output "tf_vm-ephemeral-ip" {
   value      = google_compute_instance.tf_vm.network_interface[0].access_config.0.nat_ip
+  depends_on = [google_compute_instance.tf_vm]
+}
+
+output "tf_vm_ip" {
+  value      = google_compute_address.tf_vm_ip.address
   depends_on = [google_compute_instance.tf_vm]
 }
